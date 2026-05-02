@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>智能应急速查</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="wechat-block" class="wechat-block" style="display:none;">
+    <div class="block-content">
+      <div class="block-icon">🛡️</div>
+      <div class="block-title">请在微信中打开</div>
+      <div class="block-desc">本应用仅支持在微信内置浏览器中访问，请复制链接后在微信中打开。</div>
+      <div class="block-link" id="copyLink">📋 复制链接</div>
+      <div class="block-tip">长按链接 → 复制 → 打开微信 → 粘贴发送给自己 → 点击打开</div>
+    </div>
+  </div>
+
+  <div id="app" class="app">
+    <div id="page-home" class="page page-home active">
+      <div class="header">
+        <div class="header-top">
+          <div class="logo-area">
+            <span class="logo-icon">🛡️</span>
+            <div class="logo-text">
+              <span class="app-name">智能应急速查</span>
+              <span class="app-slogan">秒懂应急 · 快速响应</span>
+            </div>
+          </div>
+          <div class="dark-toggle" id="toggleDarkHome">
+            <span id="darkIconHome">🌙</span>
+          </div>
+        </div>
+        <div class="search-entry" id="goToQA">
+          <span class="search-icon">🔍</span>
+          <span class="search-placeholder">搜索应急问题，如"烫伤怎么处理"</span>
+          <span class="search-ai">智能问答</span>
+        </div>
+      </div>
+
+      <div class="quick-nav">
+        <div class="nav-item" data-nav="qa">
+          <div class="nav-icon-wrap" style="background: linear-gradient(135deg, #2563EB, #3B82F6);">
+            <span class="nav-icon">🤖</span>
+          </div>
+          <span class="nav-label">智能问答</span>
+        </div>
+        <div class="nav-item" data-nav="cards">
+          <div class="nav-icon-wrap" style="background: linear-gradient(135deg, #059669, #34D399);">
+            <span class="nav-icon">📋</span>
+          </div>
+          <span class="nav-label">知识卡</span>
+        </div>
+        <div class="nav-item" data-nav="guide">
+          <div class="nav-icon-wrap" style="background: linear-gradient(135deg, #DC2626, #F87171);">
+            <span class="nav-icon">🚨</span>
+          </div>
+          <span class="nav-label">急指引</span>
+        </div>
+        <div class="nav-item" data-nav="daily">
+          <div class="nav-icon-wrap" style="background: linear-gradient(135deg, #F97316, #FBBF24);">
+            <span class="nav-icon">📖</span>
+          </div>
+          <span class="nav-label">每日科普</span>
+        </div>
+      </div>
+
+      <div class="sos-section">
+        <div class="sos-btn" id="sosBtn">
+          <span class="sos-icon">🆘</span>
+          <span class="sos-text">SOS 紧急求救</span>
+        </div>
+      </div>
+
+      <div class="emergency-section">
+        <div class="section-header">
+          <span class="section-title">🚨 紧急指引</span>
+          <span class="section-more" data-nav="guide">查看全部 ›</span>
+        </div>
+        <div class="emergency-scroll">
+          <div class="emergency-list" id="emergencyList"></div>
+        </div>
+      </div>
+
+      <div class="quick-qa-section">
+        <div class="section-header">
+          <span class="section-title">💬 常见问题</span>
+          <span class="section-more" data-nav="qa">更多问题 ›</span>
+        </div>
+        <div class="quick-qa-list" id="quickQAList"></div>
+      </div>
+
+      <div class="daily-section">
+        <div class="section-header">
+          <span class="section-title">📖 今日科普</span>
+          <span class="section-more" data-nav="daily">更多 ›</span>
+        </div>
+        <div class="daily-card" id="dailyCard"></div>
+      </div>
+
+      <div class="hotline-section">
+        <div class="section-header">
+          <span class="section-title">📞 紧急电话</span>
+        </div>
+        <div class="hotline-list">
+          <div class="hotline-item" data-phone="120">
+            <div class="hotline-icon" style="background: #DC2626;">
+              <span class="hotline-num">120</span>
+            </div>
+            <span class="hotline-name">医疗急救</span>
+          </div>
+          <div class="hotline-item" data-phone="119">
+            <div class="hotline-icon" style="background: #F97316;">
+              <span class="hotline-num">119</span>
+            </div>
+            <span class="hotline-name">消防救援</span>
+          </div>
+          <div class="hotline-item" data-phone="110">
+            <div class="hotline-icon" style="background: #2563EB;">
+              <span class="hotline-num">110</span>
+            </div>
+            <span class="hotline-name">报警电话</span>
+          </div>
+          <div class="hotline-item" data-phone="122">
+            <div class="hotline-icon" style="background: #059669;">
+              <span class="hotline-num">122</span>
+            </div>
+            <span class="hotline-name">交通事故</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-qa" class="page page-qa">
+      <div class="search-area">
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <input class="search-input" id="qaSearchInput" placeholder="输入应急问题，如 烫伤怎么处理">
+          <div class="search-btn" id="qaSearchBtn" style="display:none;">搜索</div>
+        </div>
+      </div>
+      <div class="category-tabs" id="qaCategoryTabs"></div>
+      <div class="quick-questions" id="qaQuickQuestions"></div>
+      <div class="search-results" id="qaSearchResults" style="display:none;"></div>
+      <div class="answer-area" id="qaAnswerArea" style="display:none;"></div>
+    </div>
+
+    <div id="page-cards" class="page page-cards">
+      <div class="search-area">
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <input class="search-input" id="cardSearchInput" placeholder="搜索知识卡片">
+        </div>
+      </div>
+      <div class="category-grid" id="cardCategoryGrid"></div>
+      <div class="card-list" id="cardList"></div>
+      <div class="empty-state" id="cardEmpty" style="display:none;">
+        <span class="empty-icon">📋</span>
+        <span class="empty-text">暂无相关卡片</span>
+      </div>
+    </div>
+
+    <div id="page-card-detail" class="page page-card-detail"></div>
+
+    <div id="page-guide" class="page page-guide">
+      <div class="page-header">
+        <span class="header-title">🚨 突发情况一步指引</span>
+        <span class="header-desc">紧急时刻，按步骤操作</span>
+      </div>
+      <div class="emergency-bar">
+        <div class="emergency-phone" id="callEmergencyBtn">
+          <span class="phone-icon">📞</span>
+          <span class="phone-text">一键求助</span>
+        </div>
+      </div>
+      <div class="guide-list" id="guideList"></div>
+      <div class="hotline-section">
+        <span class="hotline-title">紧急联系电话</span>
+        <div class="hotline-grid">
+          <div class="hotline-card" data-phone="120" data-name="医疗急救">
+            <div class="hotline-circle" style="background: #DC2626;">
+              <span class="hotline-num">120</span>
+            </div>
+            <span class="hotline-label">医疗急救</span>
+          </div>
+          <div class="hotline-card" data-phone="119" data-name="消防救援">
+            <div class="hotline-circle" style="background: #F97316;">
+              <span class="hotline-num">119</span>
+            </div>
+            <span class="hotline-label">消防救援</span>
+          </div>
+          <div class="hotline-card" data-phone="110" data-name="报警电话">
+            <div class="hotline-circle" style="background: #2563EB;">
+              <span class="hotline-num">110</span>
+            </div>
+            <span class="hotline-label">报警电话</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="page-guide-detail" class="page page-guide-detail"></div>
+
+    <div id="page-daily" class="page page-daily">
+      <div class="daily-header">
+        <span class="header-title">📖 每日科普</span>
+        <span class="header-desc">每天30秒，掌握一个应急知识</span>
+      </div>
+      <div class="checkin-card">
+        <div class="checkin-info">
+          <div class="checkin-left">
+            <span class="checkin-icon">🔥</span>
+            <div class="checkin-text">
+              <span class="checkin-days" id="checkInDays">连续打卡 0 天</span>
+              <span class="checkin-total" id="totalCheckIns">累计 0 天</span>
+            </div>
+          </div>
+          <div class="checkin-btn" id="checkInBtn">
+            <span>📝 打卡</span>
+          </div>
+        </div>
+        <div class="checkin-progress" id="checkinProgress"></div>
+      </div>
+      <div class="today-section">
+        <div class="section-label">🌟 今日科普</div>
+        <div class="today-card" id="todayCard"></div>
+      </div>
+      <div class="video-section">
+        <div class="section-label">🎬 科普视频</div>
+        <div class="video-card">
+          <video
+            id="dailyVideo"
+            class="video-player"
+            src="https://zyxzhy-1400376799.cos.ap-beijing.myqcloud.com/2026-05-02_164658_097.mp4"
+            controls
+            preload="metadata"
+            playsinline
+            webkit-playsinline
+            x5-video-player-type="h5"
+          ></video>
+        </div>
+      </div>
+      <div class="game-section">
+        <div class="section-label">🎮 应急知识小游戏</div>
+        <div class="game-card" id="openGameBtn">
+          <div class="game-cover">
+            <span class="game-cover-icon">🎮</span>
+          </div>
+          <div class="game-info">
+            <span class="game-name">应急知识闯关</span>
+            <span class="game-desc">边玩边学，轻松掌握应急知识</span>
+          </div>
+          <div class="game-play-btn"><span>开始</span></div>
+        </div>
+        <div class="game-qr-tip">
+          <span class="game-qr-text">打不开？请扫描下方二维码</span>
+          <img class="game-qr-img" src="assets/game-qr.jpg" alt="小游戏二维码" id="gameQR">
+        </div>
+      </div>
+      <div class="quiz-section">
+        <div class="section-label">🧠 应急知识小测验</div>
+        <div class="quiz-card" id="quizCard"></div>
+      </div>
+      <div class="history-section">
+        <div class="section-label">📚 往期科普</div>
+        <div class="history-list" id="historyList"></div>
+      </div>
+    </div>
+
+    <div id="page-profile" class="page page-profile">
+      <div class="profile-header">
+        <div class="avatar-area">
+          <div class="avatar">
+            <span class="avatar-icon">🛡️</span>
+          </div>
+          <div class="user-info">
+            <span class="user-name">应急达人</span>
+            <span class="user-level" id="userLevel">Lv.1</span>
+          </div>
+        </div>
+        <div class="dark-toggle" id="toggleDarkProfile">
+          <span class="toggle-icon" id="darkIconProfile">🌙</span>
+          <span class="toggle-text" id="darkTextProfile">夜间</span>
+        </div>
+      </div>
+      <div class="stats-card">
+        <div class="stat-item">
+          <span class="stat-num" id="statCheckInDays">0</span>
+          <span class="stat-label">连续打卡</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num" id="statTotalCheckIns">0</span>
+          <span class="stat-label">累计打卡</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num" id="statCollectionCount">0</span>
+          <span class="stat-label">收藏知识</span>
+        </div>
+      </div>
+      <div class="menu-list">
+        <div class="menu-item" data-nav="collection">
+          <span class="menu-icon">❤️</span>
+          <span class="menu-text">我的收藏</span>
+          <span class="menu-arrow">›</span>
+        </div>
+        <div class="menu-item" data-nav="daily">
+          <span class="menu-icon">📖</span>
+          <span class="menu-text">每日科普</span>
+          <span class="menu-arrow">›</span>
+        </div>
+        <div class="menu-item" data-nav="qa">
+          <span class="menu-icon">🤖</span>
+          <span class="menu-text">智能问答</span>
+          <span class="menu-arrow">›</span>
+        </div>
+        <div class="menu-item" data-nav="quiz">
+          <span class="menu-icon">🧠</span>
+          <span class="menu-text">应急测验</span>
+          <span class="menu-arrow">›</span>
+        </div>
+        <div class="menu-item" id="showAbout">
+          <span class="menu-icon">ℹ️</span>
+          <span class="menu-text">关于我们</span>
+          <span class="menu-arrow">›</span>
+        </div>
+        <div class="menu-item" id="showDisclaimer">
+          <span class="menu-icon">⚠️</span>
+          <span class="menu-text">免责声明</span>
+          <span class="menu-arrow">›</span>
+        </div>
+      </div>
+      <div class="hotline-quick">
+        <span class="hotline-title">紧急联系电话</span>
+        <div class="hotline-row">
+          <div class="hotline-btn" data-phone="120" style="border-color: #DC2626;">
+            <span class="hotline-num" style="color: #DC2626;">120</span>
+            <span class="hotline-name">急救</span>
+          </div>
+          <div class="hotline-btn" data-phone="119" style="border-color: #F97316;">
+            <span class="hotline-num" style="color: #F97316;">119</span>
+            <span class="hotline-name">消防</span>
+          </div>
+          <div class="hotline-btn" data-phone="110" style="border-color: #2563EB;">
+            <span class="hotline-num" style="color: #2563EB;">110</span>
+            <span class="hotline-name">报警</span>
+          </div>
+        </div>
+      </div>
+      <div class="version-info">智能应急速查 v2.0.0 | 317330.xyz</div>
+    </div>
+
+    <div id="page-collection" class="page page-collection">
+      <div class="page-top-bar">
+        <span class="back-btn" data-nav="profile">←</span>
+        <span class="page-top-title">我的收藏</span>
+      </div>
+      <div class="search-bar-wrap">
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <input class="search-input" id="collectionSearchInput" placeholder="搜索收藏内容">
+        </div>
+      </div>
+      <div class="collection-list" id="collectionList"></div>
+      <div class="empty-state" id="collectionEmpty" style="display:none;">
+        <span class="empty-icon">📋</span>
+        <span class="empty-text" id="collectionEmptyText">暂无收藏内容</span>
+        <span class="empty-hint">浏览知识卡片时点击❤️即可收藏</span>
+      </div>
+    </div>
+
+    <div id="page-quiz" class="page page-quiz">
+      <div class="page-top-bar">
+        <span class="back-btn" data-nav="home">←</span>
+        <span class="page-top-title">🧠 应急知识测验</span>
+      </div>
+      <div class="quiz-container" id="quizContainer"></div>
+    </div>
+
+    <div id="page-sos" class="page page-sos">
+      <div class="page-top-bar">
+        <span class="back-btn" data-nav="home">←</span>
+        <span class="page-top-title">🆘 紧急求救</span>
+      </div>
+      <div class="sos-content" id="sosContent"></div>
+    </div>
+
+    <div class="tab-bar" id="tabBar">
+      <div class="tab-item active" data-tab="home">
+        <span class="tab-icon">🏠</span>
+        <span class="tab-label">首页</span>
+      </div>
+      <div class="tab-item" data-tab="cards">
+        <span class="tab-icon">📋</span>
+        <span class="tab-label">知识卡</span>
+      </div>
+      <div class="tab-item" data-tab="guide">
+        <span class="tab-icon">🚨</span>
+        <span class="tab-label">急指引</span>
+      </div>
+      <div class="tab-item" data-tab="profile">
+        <span class="tab-icon">👤</span>
+        <span class="tab-label">我的</span>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay" style="display:none;">
+      <div class="modal-box" id="modalBox">
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-content" id="modalContent"></div>
+        <div class="modal-actions" id="modalActions"></div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" style="display:none;">
+      <span id="toastText"></span>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
