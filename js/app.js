@@ -237,7 +237,7 @@
       shareBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         if (navigator.share) {
-          navigator.share({ title: '智能应急速查 - ' + daily.title, text: daily.content, url: window.location.href });
+          navigator.share({ title: 'AI应急速查 - ' + daily.title, text: daily.content, url: window.location.href });
         } else {
           copyToClipboard(daily.title + '\n' + daily.content);
           showToast('内容已复制，可分享给好友');
@@ -312,7 +312,7 @@
           }
         });
       } else {
-        resultsEl.innerHTML = '<div class="section-label">🔍 搜索结果</div><div class="no-result"><span class="no-result-icon">🤖</span><span class="no-result-text">本地未找到，点击搜索将调用智能解答</span></div>';
+        resultsEl.innerHTML = '<div class="section-label">🔍 搜索结果</div><div class="no-result"><span class="no-result-icon">🤖</span><span class="no-result-text">本地未找到，点击搜索将调用AI解答</span></div>';
         resultsEl.style.display = '';
       }
       document.getElementById('qaAnswerArea').style.display = 'none';
@@ -408,7 +408,7 @@
     }
 
     area.innerHTML = '<div class="answer-card"><div class="answer-header">' +
-      '<span class="answer-icon">🤖</span><span class="answer-label">' + (qa.isAIAnswer ? '智能实时生成' : '智能解答') + '</span>' +
+      '<span class="answer-icon">🤖</span><span class="answer-label">' + (qa.isAIAnswer ? 'AI实时生成' : 'AI解答') + '</span>' +
       (qa.isAIAnswer ? '<span class="ai-badge">✨ 实时</span>' : '') +
       '</div><div class="answer-question"><span class="qa-tag ' + ans.tagClass + '">' + ans.category + '</span>' +
       '<span class="question-text">' + ans.question + '</span></div>' +
@@ -419,7 +419,7 @@
     var shareBtn = document.getElementById('qaShareBtn');
     if (shareBtn) shareBtn.addEventListener('click', function () {
       if (navigator.share) {
-        navigator.share({ title: '智能应急速查 - ' + ans.question, text: ans.steps.join('\n'), url: window.location.href });
+        navigator.share({ title: 'AI应急速查 - ' + ans.question, text: ans.steps.join('\n'), url: window.location.href });
       } else {
         copyToClipboard(ans.question + '\n\n' + ans.steps.map(function (s, i) { return (i + 1) + '. ' + s; }).join('\n') + '\n\n⚠️ ' + ans.warning);
         showToast('已复制到剪贴板');
@@ -448,13 +448,13 @@
     qa.showResult = true;
     qa.isAILoading = true;
     qa.isAIAnswer = true;
-    qa.currentAnswer = { question: question, category: '智能解答', tagClass: 'tag-medical', steps: [], warning: '', source: '' };
+    qa.currentAnswer = { question: question, category: 'AI解答', tagClass: 'tag-medical', steps: [], warning: '', source: '' };
     qa.relatedQuestions = [];
     showQAAnswer();
 
     var API_BASE = 'https://api.siliconflow.cn/v1/chat/completions';
     var API_KEY = 'sk-rmhfzxzasgtoqxscrvpicttvhnjlpszompsqjrxvaemimtdd';
-    var SYSTEM_PROMPT = '你是"智能应急速查"的智能应急问答助手。回答必须步骤化，包含关键提醒和信息来源。格式：【步骤】\n1. xxx\n【关键提醒】\nxxx\n【来源】\nxxx';
+    var SYSTEM_PROMPT = '你是"AI应急速查"的AI应急问答助手。回答必须步骤化，包含关键提醒和信息来源。格式：【步骤】\n1. xxx\n【关键提醒】\nxxx\n【来源】\nxxx';
 
     fetch(API_BASE, {
       method: 'POST',
@@ -736,7 +736,7 @@
 
     document.getElementById('dailyShareBtn').addEventListener('click', function () {
       if (navigator.share) {
-        navigator.share({ title: '智能应急速查 - ' + today.title, text: today.content, url: window.location.href });
+        navigator.share({ title: 'AI应急速查 - ' + today.title, text: today.content, url: window.location.href });
       } else {
         copyToClipboard(today.title + '\n' + today.content);
         showToast('内容已复制，可分享给好友');
@@ -1052,7 +1052,7 @@
     });
 
     document.getElementById('showAbout').addEventListener('click', function () {
-      showModal('关于我们', '智能应急速查·秒懂应急\n\n聚焦"便捷查询+智能解答+高效传播"核心需求，实现全民应急科普知识的精准化、便捷化传播，提升公众应急处理能力。\n\n所有科普内容均引用官方应急指南，确保权威可靠。\n\n访问地址：317330.xyz', [
+      showModal('关于我们', 'AI应急速查·秒懂应急\n\n聚焦"便捷查询+AI解答+高效传播"核心需求，实现全民应急科普知识的精准化、便捷化传播，提升公众应急处理能力。\n\n所有科普内容均引用官方应急指南，确保权威可靠。\n\n访问地址：317330.xyz', [
         { text: '知道了', className: 'modal-btn-confirm' }
       ]);
     });
